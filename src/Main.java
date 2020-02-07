@@ -1,0 +1,43 @@
+import com.test.Constants;
+import com.test.panel.MyPanel;
+import com.test.person.Person;
+import com.test.person.PersonPool;
+import javax.swing.*;
+import java.util.List;
+import java.util.Random;
+
+/**
+ * 主程序入口
+ *
+ * @Author 湛神
+ * @Date 2020/2/7 6:06 PM
+ */
+public class Main {
+
+    public static void main(String[] args) {
+        MyPanel p = new MyPanel();
+        Thread panelThread = new Thread(p);
+        JFrame frame = new JFrame();
+        frame.add(p);
+        frame.setSize(1000, 800);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        panelThread.start();
+
+        List<Person> people = PersonPool.getInstance().getPersonList();
+        for(int i=0;i< Constants.ORIGINAL_COUNT;i++){
+            int index = new Random().nextInt(people.size()-1);
+            Person person = people.get(index);
+
+            while (person.isInfected()){
+                index = new Random().nextInt(people.size()-1);
+                person = people.get(index);
+            }
+            person.beInfected();
+
+        }
+
+
+    }
+}
